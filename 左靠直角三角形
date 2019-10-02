@@ -1,0 +1,32 @@
+//
+//  main.c
+//  Created by 毛遵杰 on 2018/10/9.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    int i,j,len;
+    printf("next there will be something brand new\n");
+    printf("short side.");
+    scanf("%d",&len);
+    for (i=1;i<=len;i++){
+        for (j=1;j<=i;j++)
+            putchar('*');
+        putchar('\n');
+    }
+    system("pause");
+    return 0;
+
+    
+
+}
+
+    
+
+
+
+
