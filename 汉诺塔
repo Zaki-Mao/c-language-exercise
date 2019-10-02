@@ -1,0 +1,31 @@
+//
+//  main.c
+//  hanoi
+//
+//  Created by 毛遵杰 on 2018/12/3.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+void hanoitower(int n,char a,char b,char c)
+{
+    if (n==1)
+    {
+        printf("从%c挪动到%c\n",a,c);
+    }
+    else
+    {
+        hanoitower(n-1,a,c,b);
+        printf("从%c挪动到%c\n",a,c);
+        hanoitower(n-1,b,a,c);
+        
+    }
+}
+int main(void)
+{
+    int number;
+    printf("请输入汉诺塔的层数\n");
+    scanf("%d",&number);
+    hanoitower(number,'A','B','C');
+    return 0;
+}
