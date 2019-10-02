@@ -1,0 +1,43 @@
+//
+//  main.c
+//  product 10.11
+//
+//  Created by 毛遵杰 on 2018/10/11.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+int main(void)
+{
+    //char a ='Z';
+    int line,word,i;
+    printf("enter a number line\n");
+    scanf("%d",&line);
+    for (i=1;i<=line;i++) {
+        for(word=1;word<=i;word++)
+        {
+        printf("a");
+        }
+        //for (word=1; word<=i;++word) {
+           // printf("%c",a-word+1);
+        printf("\n");
+        }
+    
+        
+        
+
+    
+    return 0;
+    
+    
+    
+    
+    
+    
+        
+    
+
+    
+   
+    
+}
