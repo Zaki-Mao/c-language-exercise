@@ -1,0 +1,28 @@
+//
+//  main.c
+//  课堂
+//
+//  Created by 毛遵杰 on 2018/10/22.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+
+#include <stdio.h>
+#include <math.h>
+int main(void)
+{
+    int no,a,b;
+    printf("please en a num");
+    scanf("%d",&no);
+    for(a=1;a<=no;a++) {
+        b=pow(2,a);
+        if(b<no)
+            printf("%d\t",b);
+    }
+    
+    return 0;
+  
+        
+    
+    
+}
