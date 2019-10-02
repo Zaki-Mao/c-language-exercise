@@ -1,0 +1,50 @@
+//
+//  main.c
+//  练习
+//
+//  Created by 毛遵杰 on 2018/11/14.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+int main(void)
+{
+    int a=0,num,empty,words,i;
+    printf("please enter a num\n");
+    scanf("%d",&num);
+    for (i=1;i<=num;i++)
+    {
+        for (empty=0;empty<=i-2;empty++)
+        {
+            printf(" ");
+        }
+        for (words=0;words<=num-i;words++)
+        {
+            printf("%d",i);
+        }
+        for (words=0;words<=num-i-1;words++)
+        {
+            printf("%d",i);
+        }
+        printf("\n");
+    }
+    for (i=1;i<=num;i++)
+    {
+        for (empty=1;empty<num-i+1;empty++)
+        {
+            printf(" ");
+        }
+        for (words=1;words<=2*i-1;words++)
+        {
+            
+            printf("%d",a+i);
+        }
+        
+        printf("\n");
+        
+    }
+    
+    return 0;
+}
+
+
