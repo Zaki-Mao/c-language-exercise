@@ -1,0 +1,24 @@
+//
+//  main.c
+//  3,5的倍数求和
+//
+//  Created by 毛遵杰 on 2018/11/12.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+int main(void)
+{
+    int no,i,sum=0;
+    printf("please en a num\n");
+    scanf("%d",&no);
+    for (i=0;i<no;i++)
+    {
+        if (i%3==0||i%5==0)
+            sum+=i;
+        
+        
+    }
+    printf("sum=%d",sum);
+    return 0;
+}
