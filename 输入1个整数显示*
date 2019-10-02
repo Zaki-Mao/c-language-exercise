@@ -1,0 +1,42 @@
+//
+//  main.c
+//  输一个整数显示*
+//
+//  Created by 毛遵杰 on 2018/11/15.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+int main(void)
+{
+    int i,num;
+    
+    do {
+        printf("please enter a number\n");
+    scanf("%d",&num);
+    if (num<=0)
+    {
+        printf("please do not enter the no interanger\n");
+    }
+    } while (num<=0);
+    do {
+       
+        for (i=1;i<=num;i++)
+        
+            printf("*");
+            putchar('\n');
+        
+        printf("whether you wish continue enter 'return',or put 0 to end the loop\n");
+        
+        printf("please enter a num again\n");
+      
+        
+      
+        
+        
+        scanf("%d",&num);
+        }while(num!=0);
+    return 0;
+    
+    
+}
