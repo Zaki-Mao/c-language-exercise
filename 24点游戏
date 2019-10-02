@@ -1,0 +1,380 @@
+//
+//  main.c
+//  毛遵杰 0019 d1 hmk2 24 game 1.10
+//
+//  Created by 毛遵杰 on 2019/1/10.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+#define MAXCHAR 100
+#define STACK_FULL -999
+#define STACK_EMPTY -998
+#define ILLEGAL_TOKEN -997
+#define RPN_ERROR -996
+#define CARD_TEN 128
+
+int usage(void);        // menu, return the user's choice.
+int token2index(int d);        // translate token char to num.
+
+// Stack
+struct Stack;
+typedef struct Stack *stack;
+stack create(int n);
+void empty(stack s);
+int is_empty(stack s);
+int is_full(stack s);
+int push(stack s, int n);
+int pop(stack s);
+void destroy(stack s);
+struct Stack {
+    int *a;
+    int size;    // size of stack.
+    int index;    // top of stack (not used yet)
+};
+// END Stack
+
+// RPN
+void RPN(void);
+void getRPN(char *s);
+int parseRPN(char *s, int *t, int n);
+int storeRPN(int *t, int n);
+int calcRPN(stack s, int *t, int n);
+// END RPN
+
+// Permutation
+void Permutation(void);
+void perm(int *a, int k, int n);
+// END Permutation
+
+// Combination
+void Combination(void);
+void comb(int *a, int *b, int k, int l, int m, int n);
+// END Combination
+
+void Quit(void);
+
+int token_index[] = {    \
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, \
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, \
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, \
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, \
+    -1, -1, 42, 43, -1, 45, -1, 47, -1, -1, \
+    2, 3, 4, 5, 6, 7, 8, 9, -1, -1, \
+    -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, \
+    -1, -1, -1, -1, 11, 13, -1, -1, -1, -1, \
+    -1, 12, -1, -1, -1, -1, -1, -1, -1, -1, \
+    -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, \
+    -1, -1, -1, -1, -1, -1, 11, 13, -1, -1, \
+    -1, -1, -1, 12, -1, -1, -1, -1, -1, -1, \
+    -1, -1, -1, -1, -1, -1, -1, -1 \
+};
+
+int main(void) {
+    int c;
+    while (1) {
+        c = usage();
+        if (c == 'a')        RPN();
+        else if (c == 'b')    Permutation();
+        else if (c == 'c')    Combination();
+        else             break;
+    }
+    Quit();
+}
+
+int usage(void) {
+    int c;
+    fputs("\n\
+          ***Welcom to the 24 GAME!***\n\
+          \n\
+          Please select one operation:\n\
+          a) Compute a RPN expression for the 24 GAME.\n\
+          b) Print permutations.\n\
+          c) Print combinations.\n\
+          q) quit the game.\n\
+          \n\
+          Your choice is (a/b/c/q): ", stdout);
+    setbuf(stdin, NULL);
+    scanf("%c%*c", &c);
+    while (c != 'a' && c != 'b' && c != 'c' && c != 'q') {
+        fputs("Warning: you must input one of a/b/c/q !!!\n\
+              Your choice is (a/b/c/q): ", stdout);
+        scanf("%c%*c", &c);
+    }
+    return c;
+}
+
+int token2index(int d) {
+    return d == CARD_TEN ? 10 : token_index[d];
+}
+
+// RPN
+void RPN(void) {
+    char line[MAXCHAR];
+    int token[7];
+    int result;
+    stack s;
+    if ((s = create(MAXCHAR)) == NULL) {
+        fputs("Error: you cannot play RPN now!\n", stderr);
+        return;
+    }
+    while (1) {
+        getRPN(line);
+        if (parseRPN(line, token, 7) <= 0) {
+            fputs("Error: wrong cards or operators!\n", stderr);
+            continue;
+        }
+        if (storeRPN(token, 7) == ILLEGAL_TOKEN) {
+            fputs("Error: illegal token!\n", stderr);
+            continue;
+        }
+        if ((result = calcRPN(s, token, 7)) == RPN_ERROR) {
+            fputs("Error: wrong RPN!\n", stderr);
+            continue;
+        } else {
+            if (result == 24) {
+                fputs("Bingo!\n", stdout);
+            } else {
+                fputs("Sorry!\n", stdout);
+            }
+            break;
+        }
+    }
+    destroy(s);
+}
+
+void getRPN(char *s) {
+    fputs("Please input 4 cards and 3 operators, separated by space: ", stdout);
+    setbuf(stdin, NULL);
+    fgets(s, MAXCHAR - 1, stdin);
+}
+
+int parseRPN(char *s, int *t, int n) {
+    // s: input line.
+    // t: parsed token.
+    // n: size of needed token.
+    // nop: number of operators.
+    // nd: number of digits.
+    int i, j, d, nop, nd;
+    char r[MAXCHAR];
+    i = j = nop = nd = 0;
+    while (i < n) {
+        if (*s != ' ' && *s != '\n') {
+            r[j++] = *s;
+        } else {
+            if (j == 1) {
+                d = r[0];
+                if (d <= '/') {
+                    nop++;
+                } else {
+                    nd++;
+                }
+                t[i++] = d;
+            } else {
+                r[j] = '\0';
+                if ((d = atoi(r)) == 0) {
+                    return -1;
+                }
+                d = d == 10 ? CARD_TEN : d;    // char may also be ascii 10.
+                t[i++] = d;
+                nd++;
+            }
+            j = 0;
+            if (*s == '\n') {
+                break;
+            }
+        }
+        s++;
+    }
+    if (i < n || nop != 3 || nd != 4) {
+        return -1;
+    } else {
+        return i;
+    }
+}
+
+int storeRPN(int *t, int n) {
+    int i;
+    for (i = 0; i < n; i++) {
+        if ((t[i] = token2index(t[i])) <= 0) {    // illegal token
+            return ILLEGAL_TOKEN;
+        }
+    }
+    return n;
+}
+
+int calcRPN(stack s, int *t, int n) {
+    int i, d1, d2, res;
+    for (i = 0; i < n; i++) {
+        if (t[i] <= 13)    {    // digit
+            if (push(s, t[i]) == STACK_FULL) {
+                fputs("Error: RPN is wrong!\n", stderr);
+                return RPN_ERROR;
+            }
+        } else {    // operator
+            if ((d1 = pop(s)) == STACK_EMPTY || (d2 = pop(s)) == STACK_EMPTY) {
+                fputs("Error: RPN is wrong!\n", stderr);
+                return RPN_ERROR;
+            }
+            if (t[i] == 42) res = d1 * d2;
+            else if (t[i] == 43) res = d1 + d2;
+            else if (t[i] == 45) res = d2 - d1;
+            else res = d2 / d1;
+            if (push(s, res) == STACK_FULL) {
+                fputs("Error: RPN is wrong!\n", stderr);
+                return RPN_ERROR;
+            }
+        }
+    }
+    if ((d1 = pop(s)) == STACK_EMPTY || (d2 = pop(s)) != STACK_EMPTY) {
+        fputs("Error: RPN is wrong!\n", stderr);
+        return RPN_ERROR;
+    }
+    return d1;
+}
+// END RPN
+
+// Permutation
+void Permutation(void) {
+    int n = -1;
+    int a[7];
+    int i;
+    while (n > 7 || n < 1) {
+        fputs("Please input an interger between 1 and 7: ", stdout);
+        scanf("%d", &n);
+    }
+    for (i = 0; i < n; i++) {
+        a[i] = i + 1;
+    }
+    perm(a, 0, n);
+}
+
+void perm(int *a, int k, int n) {
+    // A(n) = n * A(n-1)
+    int i, tmp;
+    if (k == n - 1) {
+        for (i = 0; i < n; i++) {
+            printf("%d", a[i]);
+        }
+        putchar('\n');
+        return;
+    }
+    for (i = k; i < n; i++) {
+        tmp = a[k];
+        a[k] = a[i];
+        a[i] = tmp;
+        perm(a, k + 1, n);
+        tmp = a[k];
+        a[k] = a[i];
+        a[i] = tmp;
+    }
+}
+// END Permutation.
+
+// Combination.
+void Combination(void) {
+    int m, n;
+    int a[7];
+    int b[7];
+    int i;
+    m = n = -1;
+    while (n > 7 || n < 1) {
+        fputs("Please input an interger between 1 and 7: ", stdout);
+        scanf("%d", &n);
+    }
+    while (m < 0 || m > n) {
+        fprintf(stdout, "Please input an interger between 0 and %d: ", n);
+        scanf("%d", &m);
+    }
+    for (i = 0; i < n; i++) {
+        a[i] = i + 1;
+        b[i] = i + 1;
+    }
+    comb(a, b, 0, 0, m, n);
+}
+
+void comb(int *a, int *b, int k, int l, int m, int n) {
+    // C(n, k) = C(n-1, k) + C(n-1, k-1)
+    int i;
+    if (m == 0) {
+        for (i = 0; i < n; i++) {
+            printf("%d", a[i]);
+        }
+        putchar('\n');
+        return;
+    }
+    if (k == m) {
+        for (i = 0; i < m; i++) {
+            printf("%d", b[i]);
+        }
+        putchar('\n');
+        return;
+    }
+    if (n - l < m - k) {
+        return;
+    }
+    b[k] = a[l];
+    comb(a, b, k + 1, l + 1, m, n);
+    comb(a, b, k, l + 1, m, n);
+}
+// END Combination
+
+void Quit(void) {
+    fputs("Goodbye!\n", stdout);
+}
+
+// Stack
+stack create(int n) {
+    stack s;
+    if ((s = malloc(sizeof(struct Stack))) == NULL) {
+        fputs("Error: out of space!\n", stderr);
+        return NULL;
+    }
+    if ((s->a = (int*) (malloc(sizeof(int) * n))) == NULL) {
+        fputs("Error: out of space!\n", stderr);
+        return NULL;
+    }
+    s->index = 0;
+    s->size = n;
+    return s;
+}
+
+void empty(stack s) {
+    s->index = 0;
+}
+
+int is_empty(stack s) {
+    return s->index <= 0 ? 1 : 0;
+}
+
+int is_full(stack s) {
+    return s->index >= s->size ? 1 : 0;
+}
+
+int push(stack s, int n) {
+    if (is_full(s)) {
+        fputs("Error: Stack is full!\n", stderr);
+        return STACK_FULL;
+    } else {
+        s->a[s->index] = n;
+        s->index++;
+    }
+    return 1;
+}
+
+int pop(stack s) {
+    if (is_empty(s)) {
+        //fputs("Error: Stack is empty!\n", stderr);
+        return STACK_EMPTY;
+    } else {
+        s->index--;
+        return s->a[s->index];
+    }
+}
+
+void destroy(stack s) {
+    free(s->a);
+    free(s);
+}
+// END Stack
