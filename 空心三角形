@@ -1,0 +1,52 @@
+//
+//  main.c
+//  空心三角形
+//
+//  Created by 毛遵杰 on 2018/11/14.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+
+int main(void)
+{
+    int n,empty,word;
+    printf("num= ");
+    scanf("%d",&n);
+    for (int i=1;i<=n;i++)
+    {
+        if(i!=n){
+        for(empty=1;empty<=n-i;empty++)
+        {
+            printf(" ");
+        }
+            
+            
+        for (word=1;word<=i;word++)
+            {
+                if(word==1)
+                {printf("*");}
+                else {printf(" ");}
+            }
+        for (int word2=1;word2<=i-1;word2++)
+            {
+                if(word2==i-1)
+                { printf("*");}
+                else {printf(" ");}
+            }
+            printf("\n");}
+        if(i==n)
+        {
+            for(i=1;i<=2*n-1;i++)
+                printf("*");
+            
+        }
+    }
+   
+    
+    return 0;
+    }
+
+    
+
+
