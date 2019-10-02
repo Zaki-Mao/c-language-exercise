@@ -1,0 +1,27 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef int * List;
+Int Find(List L,int MaxSize,int x)
+{
+    int posi = 0;
+    for( i = 1; i < MaxSize; i++ )
+    {
+        if( L[i] == x )
+        {
+            posi= i;
+            break;
+        }
+    }
+    if(posi){
+        for( i = posi; i > 1; i-- )
+        {
+            L[i] = L[i-1];
+        }
+        L[1] = x;
+    }
+    else
+        return 0;
+}
+
+
+
