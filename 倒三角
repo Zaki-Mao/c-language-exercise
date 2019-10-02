@@ -1,0 +1,33 @@
+//
+//  main.c
+//  倒三角
+//
+//  Created by 毛遵杰 on 2018/11/12.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+int main(void)
+{
+    int a=0,line,i,words,empty;
+    printf("please en a line\n");
+    scanf("%d",&line);
+    for (i=0;i<line;i++)
+    {
+        for (empty=0;empty<=i;empty++)
+        {
+            printf(" ");
+        }
+        for (words=0;words<=line-i-1;words++)
+        {
+            printf("%d",a+i+1);
+        }
+        for (words=0;words<=line-i-2;words++)
+       {
+          printf("%d",a+i+1);
+        }
+       printf("\n");
+   
+   }
+        return 0;
+}
