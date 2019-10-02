@@ -1,0 +1,56 @@
+//
+//  main.c
+//  assignment 1
+//
+//  Created by 毛遵杰 on 2019/9/27.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+
+
+char* _find_char(char*const_source,char*const_chars){
+    char*p1=const_source,*p2=const_chars;
+
+    while ((*p1 != NULL) && ( *p2 != NULL))
+    {
+        if (*p1 == *p2)
+        {
+            return p1;
+        }
+        p1++;
+        p2++;
+    }
+    return NULL;
+}
+int main(void)
+{
+    char s1[100]={0};
+    char s2[50]={0};
+
+    while(1){
+
+        printf("please enter string 1");
+        scanf("%s",s1);
+        printf("please enter string 2");
+        scanf("%s",s2);
+    }
+
+        char *p=NULL;
+        p=_find_char(s1,s2);
+        
+    
+    if(p)
+    {
+        printf("%c\n",*p);
+    }
+    else
+    {
+        printf("null\n");
+    }
+   
+    
+    return 0;
+}
+
+
