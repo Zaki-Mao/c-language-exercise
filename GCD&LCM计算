@@ -1,0 +1,113 @@
+//
+//  main.c
+//  毛遵杰 18098531-i011-0019 D1 作业
+//
+//  Created by 毛遵杰 on 2018/11/19.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+//保存到数组中，并返回数组长度。
+int saveFactor(int factors[],int number)
+
+{
+ 
+    int factorsLength = 0, i = 0;
+    for (i = 1; i < number + 1; ++i)
+    {
+        if (number % i == 0)
+        {
+            factors[factorsLength] = i;
+            ++factorsLength;
+        }
+    }
+    return factorsLength;
+}
+
+//打印约数（print factors)
+
+void printFactors(int factors[], int length)
+{
+    
+    for (int i = 0; i < length; i++)
+    {
+        printf("%d ", factors[i]);
+    }
+    printf("\n");
+}
+
+//打印素数 (print prime)
+void printPrime(int factors[], int length)
+{
+    int i, j;
+    for (i = 1; i < length; ++i)
+    {
+        int a = 0;
+        for (j = 2; j < factors[i]; ++j)
+        {
+            if (factors[i] % j == 0)
+            {
+                a++;
+            }
+        }
+        if (a == 0)
+        {
+            printf("%d ", factors[i]);
+        }
+    }
+    printf("\n");
+}
+
+int main()
+{
+    int firstNumber, secondNumber, i, j, firstFactorLength, secondFactorLength;
+    int firstFactors[100], secondFactors[100];
+    
+    printf("Please provide 2 integer number\n");
+    
+    int output = scanf("%d %d", &firstNumber, &secondNumber);
+    
+    // if the provide number is illegal,return
+    if (output == 0)
+    {
+        printf("Byebye\n");
+        return 0;
+    }
+    
+    //save firstNumber's factors into the array
+    firstFactorLength = saveFactor(firstFactors, firstNumber);
+    secondFactorLength = saveFactor(secondFactors, secondNumber);
+    
+    printf("First number's fators:\n");
+    printFactors(firstFactors, firstFactorLength);
+    
+    printf("Second number's fators:\n");
+    printFactors(secondFactors, secondFactorLength);
+    
+    printf("first number's prime fators:\n");
+    printPrime(firstFactors, firstFactorLength);
+    
+    printf("Second number's prime fators:\n");
+    printPrime(secondFactors, secondFactorLength);
+    
+    // print gcd
+    int gcd = 0;
+    for (i = 0; i < firstFactorLength; i++)
+    {
+        for (j = 0; j < secondFactorLength; j++)
+        {
+            if (firstFactors[i] == secondFactors[j])
+            {
+                gcd = firstFactors[i];
+                break;
+            }
+        }
+    }
+    printf("gcd = %d\n", gcd);
+    
+    //print lcm
+    int lcm = firstNumber * secondNumber / gcd;
+    printf("LCM = %d\n", lcm);
+    
+    return 0;
+}
