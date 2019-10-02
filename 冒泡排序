@@ -1,0 +1,42 @@
+//
+//  main.c
+//  bubble
+//
+//  Created by 毛遵杰 on 2019/4/8.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+
+void bsort(int a[],int n)
+{
+    int i,j;
+    for (i=0;i<n-1;i++)
+    {
+        for (j=i+1;i<n;j++)
+        {
+            if (a[j-1]>a[j])
+            {
+                int temp=a[j];
+                a[j]=a[j-1];
+                a[j-1]=temp;
+            }
+        }
+
+        
+    }
+    
+}
+#define number 5
+int main(void)
+{
+    
+    int i;
+    int ar[number]={3,5,2,1};
+    bsort(ar,number);
+    for (i=0;i<number;i++)
+        printf("%2d\n",ar[number]);
+    
+    return 0;
+    
+}
