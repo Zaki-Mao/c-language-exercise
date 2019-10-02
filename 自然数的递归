@@ -1,0 +1,33 @@
+//
+//  main.c
+//  recursion natural number
+//
+//  Created by 毛遵杰 on 2019/1/8.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+
+int f(int n)
+{
+  
+    if (n==0)
+        return 0;
+    else
+        printf("%d\n",f(n-1)+1);
+    return n;
+}
+
+
+
+
+
+
+int main(void){
+    printf("wait...soon\n");
+    int num=50;
+    printf("the answer is  %d\n",f(num));
+    
+    return 0;
+    
+}
