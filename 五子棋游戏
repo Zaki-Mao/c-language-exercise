@@ -1,0 +1,455 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdarg.h>
+
+#define MAXSIZE 19
+#define MAXCOUNT 19*19
+#define EMPTY 0
+#define WHITE 1
+#define BLACK 2
+#define NOTEXIST 3
+#define FALSE 0
+#define TRUE  1
+// test
+// #define board.value board[columnToNumber(x + 1)][y + 1][0]
+// #define board.seq board[columnToNumber(x + 1)][y + 1][1]
+
+int board[MAXSIZE][MAXSIZE][2];
+int board2[MAXSIZE][MAXSIZE][2];
+int boardWidth = 19, boardLength = 19;
+int boardSize = 19;
+FILE *fp;
+
+// board
+void initBoard();       //finish
+void drawBoardTest();   //finish
+void drawColumnNum();   //finish
+void drawRow();         //finish
+void drawInterval();    //finish
+void drawBoard();       //finish
+
+// game
+void play();
+void menu();
+void saveData();
+void loadData();
+void loadData2();
+void load();
+void newgame();
+void save();
+void replay();
+int judge(int i);
+
+int isNum(char* str);
+int toLetter(int num);
+int columnToNumber(char num);
+
+
+
+int main(int argc, char **argv) {
+  
+  int board[MAXSIZE][MAXSIZE][2];
+  int boardWidth = 5, boardLength = 5;
+  FILE *fp;
+  
+  if(argc == 1) {
+    menu();
+  } else if(argc - 1 == 2){
+    if(strcmp(argv[1], "goban") == 0) {
+      if(isNum(argv[2])) {
+        int size = atoi(argv[2]);
+        if(size < MAXSIZE) {
+          boardSize = boardWidth = boardLength = size;
+          newgame();
+          return 0;
+        } else {
+          printf("error: board size so big!\n");
+          return 0;
+        }
+      } else {
+        printf("error: board size should be a number!\n");
+        return 0;
+      }
+    } else if(strcmp(argv[1], "load") == 0) {
+      if((fp = fopen(argv[2], "r")) == NULL) {
+        printf("error: the files %s can not be opened.\n", argv[2]);
+        return 0;
+      }
+      loadData2(argv[2]);
+    } else {
+      printf("error: paramaters!\n");
+      return 0;
+    }
+  } else if(strcmp(argv[1], "-h") == 0) {
+    ;
+  } else {
+    printf("error: too much paramaters!\n");
+    return 0;
+  }
+  
+  // initBoard(boardWidth, boardLength, board);
+  // drawBoard2(board);
+  //play();
+  
+  return 0;
+}
+
+// function about board
+int toLetter(int num) {
+  return num + 65;
+}
+
+char toStone(int n) {
+  switch(n){
+    case BLACK:
+      return 'X';
+      break;
+    case WHITE:
+      return 'O';
+      break;
+    case EMPTY:
+      return '.';
+      break;
+  }
+}
+
+char toStone2(int n) {
+  switch(n) {
+    case EMPTY: {
+      return '+';
+      break;
+    }
+    case WHITE: {
+      return 'O';
+      break;
+    }
+    case BLACK: {
+      return 'X';
+      break;
+    }
+  }
+}
+
+void initBoard() {
+  for(int i = 0; i < MAXSIZE; i++) {
+    for(int j = 0; j < MAXSIZE; j++) {
+      board[i][j][0] = NOTEXIST;
+    }
+  }
+  for(int i = 0; i < boardWidth; i++) {
+    for(int j = 0; j < boardLength; j++) {
+      board[i][j][0] = EMPTY;
+    }
+  }
+}
+
+void initBoard2() {
+  for(int i = 0; i < MAXSIZE; i++) {
+    for(int j = 0; j < MAXSIZE; j++) {
+      board2[i][j][0] = NOTEXIST;
+    }
+  }
+  for(int i = 0; i < boardWidth; i++) {
+    for(int j = 0; j < boardLength; j++) {
+      board2[i][j][0] = EMPTY;
+    }
+  }
+}
+
+void drawBoardTest() {
+  for(int i = 0; i < MAXSIZE; i++) {
+    for(int j = 0; j < MAXSIZE; j++) {
+      printf("%d", board[i][j][0]);
+    }
+    printf("\n");
+  }
+}
+
+void drawColumnNum() {
+  for(int i = 0; i < boardSize; i++) {
+  	if(i < 8) {
+    	printf("   %c", i + 65);	
+	} else {
+		printf("   %c", i + 66);
+	}
+  }
+  printf("\n");
+}
+
+void drawRow(int r) {
+  printf("%2d %c", boardSize - r, toStone2(board[r][0][0]));
+  for(int i = 1; i < boardSize; i++) {
+    printf("---%c", toStone2(board[r][i][0]));
+  }
+  printf("%3d\n", boardSize - r);
+}
+
+void drawRow2(int r) {
+  printf("%2d %c", boardSize - r, toStone2(board2[r][0][0]));
+  for(int i = 1; i < boardSize; i++) {
+    printf("---%c", toStone2(board2[r][i][0]));
+  }
+  printf("%3d\n", boardSize - r);
+}
+
+void drawInterval() {
+  for(int i = 0; i < boardSize; i++) {
+    printf("   |");
+  }
+  printf("\n");
+}
+
+void drawBoard() {
+  drawColumnNum();
+  drawRow(0);
+  for(int i = 1; i < boardSize; i++) {
+    drawInterval();
+    drawRow(i);
+  }
+  drawColumnNum();
+}
+
+void drawBoard2() {
+  drawColumnNum();
+  drawRow2(0);
+  for(int i = 1; i < boardSize; i++) {
+    drawInterval();
+    drawRow2(i);
+  }
+  drawColumnNum();
+}
+
+// function about game
+void load() {
+  loadData();
+  menu();
+}
+
+void loadData() {
+  char name[20];
+  initBoard();
+  printf("enter you save file's name: \n");
+  // setbuf(stdin, NULL);
+  scanf("%s", name);
+  if((fp = fopen(name, "r")) == NULL) {
+    printf("error, cannot open or create the file.\n");
+    return;
+  }
+  fscanf(fp, "%d\n", &boardSize);
+  for(int i = 0; i < boardSize; i++) {
+    for(int j = 0; j < boardSize; j++) {
+      fscanf(fp, "%d", &board[i][j][0]);
+      fscanf(fp, "%d", &board[i][j][1]);
+    }
+  }
+  fclose(fp);
+}
+
+void loadData2(char name[]) {
+  // char name[20];
+  initBoard();
+  // printf("enter you save file's name: \n");
+  // setbuf(stdin, NULL);
+  // scanf("%s", name);
+  if((fp = fopen(name, "r")) == NULL) {
+    printf("error, cannot open or create the file.\n");
+    return;
+  }
+  fscanf(fp, "%d\n", &boardSize);
+  for(int i = 0; i < boardSize; i++) {
+    for(int j = 0; j < boardSize; j++) {
+      fscanf(fp, "%d", &board[i][j][0]);
+      fscanf(fp, "%d", &board[i][j][1]);
+    }
+  }
+  fclose(fp);
+  menu();
+}
+
+void menu() {
+  char action[10];
+  printf("please enter your action : \n");
+  printf("play: play a new game.\n");
+  printf("load: load a game.\n");
+  printf("replay: replay a game.\n");
+  printf("continue: continue a loaded game.\n");
+  printf("quit: quit the progame.\n");
+  scanf("%s", action);
+  // fgets(action, 10, stdin);
+  // gets(action);
+  // printf("%s\n", action);
+  if(strcmp(action, "play") == 0) {
+    newgame();
+  }
+  if(strcmp(action, "load") == 0) {
+    load();
+  }
+  if(strcmp(action, "replay") == 0) {
+    replay();
+  }
+  if(strcmp(action, "quit") == 0) {
+    exit(0);
+  }
+  if(strcmp(action, "continue") == 0) {
+    play();
+  }
+}
+
+void newgame() {
+  initBoard();
+  play();
+}
+
+
+
+// int toLetter(int num) {
+//   return num + 65;
+// }
+
+int columnToNumber(char num) {
+  if(num >= 'I') {
+  	return (int)num - 66;
+  } else {
+  	return (int)num - 65;
+  }
+}
+
+void play() {
+  drawBoard();
+  int num = boardSize * boardSize;
+  char x;
+  int y;
+  for(int i = 0; i < num; i++) {
+    flag:
+    printf("enter your position��or 's' to save data or 'q' to back to main menu: ");
+    setbuf(stdin, NULL);
+    scanf("%c", &x);
+    if(x == 'q' || x == 'Q') {
+      menu();
+    } else if(x == 's' || x == 'S') {
+      save();
+    }
+    scanf("%d", &y);
+    if((columnToNumber(x - 1) > boardSize || y > boardSize || board[y - 1][columnToNumber(x - 1)][0] != EMPTY)) {
+      goto flag;
+    }
+    if(i % 2 == 0) {
+      board[boardSize - y][columnToNumber(x)][0] = BLACK;
+      board[boardSize - y][columnToNumber(x)][1] = i;
+    } else {
+      board[boardSize - y][columnToNumber(x)][0] = WHITE;
+      board[boardSize - y][columnToNumber(x)][1] = i;
+    }
+    drawBoard();
+    printf("last stone's position: (%c, %d)\n", x, y);
+//    drawBoardTest();
+    if(judge(i)) {
+      if(i % 2 == 0) {
+        printf("black is win!\n");
+      } else {
+        printf("white is win!\n");
+      }
+      break;
+    }
+  }
+  menu();
+}
+
+int judge(int i) {
+  // printf("num = %d\n", i);
+  int a,b;
+  int color = i % 2 == 0 ? BLACK : WHITE;
+  // int color;
+  // if(i % 2 == 0) {
+  //   color = BLACK;
+  // } else {
+  //   color = WHITE;
+  // }
+  for(int i = 0; i < boardSize; i++) {
+    for(int j = 0; j < boardSize - 4; j++) {
+      if(board[i][j][0] == color && board[i][j + 1][0] == color && board[i][j + 2][0] == color && board[i][j + 3][0] == color && board[i][j + 4][0] == color) {
+        return 1;
+      }
+    }
+  }
+  for(int i = 0; i < boardSize - 4; i++) {
+    for(int j = 0; j < boardSize; j++) {
+      if(board[i][j][0] == color && board[i + 1][j][0] == color && board[i + 2][j][0] == color && board[i + 3][j][0] == color && board[i + 4][j][0] == color) {
+        return 1;
+      }
+    }
+  }
+  for(int i = 0; i < boardSize - 4; i++) {
+    for(int j = 0; j < boardSize - 4; j++) {
+      if(board[i][j][0] == color && board[i + 1][j + 1][0] == color && board[i + 2][j + 2][0] == color && board[i + 3][j + 3][0] == color && board[i + 4][j + 4][0] == color) {
+        return 1;
+      }
+    }
+  }
+  for(int i = 0; i < boardSize - 4; i++) {
+    for(int j = boardSize - 1; j > 3; j--) {
+      if(board[i][j][0] == color && board[i + 1][j - 1][0] == color && board[i + 2][j - 2][0] == color && board[i + 3][j - 3][0] == color && board[i + 4][j - 4][0] == color) {
+        return 1;
+      }
+    }
+  }
+  return 0;
+}
+
+void save() {
+  saveData();
+  menu();
+}
+
+void saveData() {
+  char name[20];
+  printf("enter save file's name: \n");
+  scanf("%s", name);
+  if((fp = fopen(name, "wt+")) == NULL) {
+    printf("error, cannot open or create the file.\n");
+    return;
+  }
+  fprintf(fp, "%d\n", boardSize);
+  for(int i = 0; i < MAXSIZE; i++) {
+    for(int j = 0; j < MAXSIZE; j++) {
+      fprintf(fp,"%d ", board[i][j][0]);
+      fprintf(fp,"%d ", board[i][j][1]);
+    }
+  }
+  fclose(fp);
+}
+
+void replay() {
+  initBoard2();
+  int num = 0;
+  int c;
+  for(int i = 0; i < MAXSIZE; i++) {
+    for(int j = 0; j < MAXSIZE; j++) {
+      if(board[i][j][0] != EMPTY && board[i][j][0] != NOTEXIST) {
+        if(board[i][j][1] == num) {
+          board2[i][j][0] = board[i][j][0];
+          board2[i][j][1] = board[i][j][1];
+          drawBoard2();
+          num++;
+          printf("put enter to continue: \n");
+          if((c = getchar()) != '\n') {
+            return;
+          } else {
+            continue;
+          }
+        }
+      }
+    }
+  }
+}
+
+int isNum(char *str) {
+  for(int i = 0; str[i] != '\0'; i++) {
+    if(str[i] > '9' || str[i] < '0') {
+      printf("%c ", str[i]);
+      return 0;
+    }
+  }
+  return 1;
+}
