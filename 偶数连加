@@ -1,0 +1,24 @@
+//
+//  main.c
+//  连加程序
+//
+//  Created by 毛遵杰 on 2018/10/31.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+int main(void)
+{
+    int sum=0,a,no;
+    printf("please enter a num\n");
+    scanf("%d",&no);
+    for(a=1;a<=no;a++) {
+        if (a % 2!=0)
+            sum+=a;
+        
+    }
+    
+    printf("sum=%d",sum);
+    return 0;
+    
+}
