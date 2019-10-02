@@ -1,0 +1,32 @@
+//
+//  main.c
+//  函数训练
+//
+//  Created by 毛遵杰 on 2018/11/26.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+
+int result(int x,int n)
+
+{
+    int i;
+    int sum=1;
+    
+    for (i=0;i<n;i++)
+    
+        sum*=x;
+    
+    return sum;
+}
+
+int main(void)
+{
+    int a;
+    int b;
+    printf("please enter two numbers\n");
+    scanf("%d""%d",&a,&b);
+    printf("%d的%d次幂为%d\n",a,b,result(a,b));
+    return 0;
+}
