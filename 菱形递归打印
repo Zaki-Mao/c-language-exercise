@@ -1,0 +1,46 @@
+//
+//  main.c
+//  diamond use recursive function
+//
+//  Created by 毛遵杰 on 2018/12/3.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include<stdio.h>
+//声明函数
+void print_n_char(char,int);
+void show_n_char(int,int);
+int main(void)
+{
+    int j;
+    printf("Please input an integer:");
+    scanf("%d",&j);
+    show_n_char(1,j);
+    return 0;
+    
+}
+
+void print_n_char(char c, int d)
+{
+    int k = 1;
+    while(k<=d)
+    {
+        printf("%c", c);
+        k = k+1;
+    }
+}
+
+void show_n_char(int i,int n)
+{
+    print_n_char(' ',n-i);
+    print_n_char('*',2*i-1);
+    printf("\n");
+    if(i<n)
+        show_n_char(i+1,n);
+    print_n_char(' ',n-i+1);
+    print_n_char('*',2*(i-1)-1);
+    printf("\n");
+}
+
+
+首先打印数组，将所有的数放到那个程序之中4
