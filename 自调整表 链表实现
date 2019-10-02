@@ -1,0 +1,24 @@
+
+struct Node;
+typedef struct Node * List;
+struct Node{
+    int data;
+    struct Node *Next;
+};
+
+Int Find(int x,List L)
+{
+    struct Node * p;
+    p = L->Next;
+    while(p != NULL && p->data != x)
+        p = p->Next;
+    if( p != NULL )
+    {
+        int tmp;
+        tmp= L->Next->data;
+        L->Next->data = x;
+        p->data = tmp;
+    }
+    else
+        return 0;
+}
