@@ -1,0 +1,29 @@
+//
+//  main.c
+//  逆序
+//
+//  Created by 毛遵杰 on 2019/1/9.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+int main(void)
+{
+    int n;
+    printf("enter a num\n");
+    scanf("%d",&n);
+    
+    int dig;
+    int result=0;
+    while(n>0)
+    {
+        dig=n%10;
+        result=result*10+dig;
+        n/= 10;
+    }
+    
+    
+    printf("the answer is %d",result);
+    
+    return 0;
+}
