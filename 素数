@@ -1,0 +1,37 @@
+//
+//  main.c
+//  素数
+//
+//  Created by 毛遵杰 on 2019/1/9.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+#include <math.h>
+int prime(int n)
+{
+    int i;
+    for (i=2;i<=(int)sqrt(n);i++)
+    
+    
+       if(n%i==0)
+       return 0;
+    
+    return 1;
+    
+    
+}
+
+
+int main(void)
+{
+    int i;
+    for(i=2;i<=20;i++)
+        
+    if(prime(i))
+    printf(" %d ",i);
+    
+    return 0;
+}
+
+
