@@ -1,0 +1,27 @@
+//
+//  main.c
+//  11.11
+//
+//  Created by 毛遵杰 on 2018/11/11.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+int main(void)
+{
+    int no,i;
+    int sum=0,aver=0;
+    printf("how many numbers u want to enter\n");
+    scanf("%d",&no);
+    int a[no];
+    printf("please enter these numbers\n");
+    for (i=0;i<no;i++) {
+        scanf("%d",&a[i]);
+        sum=sum+a[i];
+    }
+    aver=sum/no;
+    printf("%d\n",sum);
+    printf("%.2f\n",(double)aver);
+    
+    return 0;
+}
