@@ -1,0 +1,32 @@
+//
+//  main.c
+//  strlen function
+//
+
+
+//  Created by 毛遵杰 on 2018/12/3.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+size_t strlen(const char *s)
+{
+    int len=0;
+    while(*s++)
+        len++;
+    return len;
+}
+
+
+
+
+int main(void)
+{
+    char word[128];
+    printf("please enter words\n");
+    scanf("%s",word);
+    printf("words are %s,and the length is %d",word,strlen(word));
+    
+    return 0;
+    
+}
