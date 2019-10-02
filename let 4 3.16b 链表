@@ -1,0 +1,89 @@
+//
+//  main.c
+//  problem_3.16b linked list
+//
+//  Created by 毛遵杰 on 2019/10/2.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+
+#include <stdlib.h>
+
+struct node
+{
+    int data;
+    struct node*next;
+};
+
+void creatlist(struct node *head,int len)
+{
+    int i;
+    struct node *p;
+    p = head;
+    printf(" enter %d numbers",len);
+    for (i = 0; i <len; i++)
+    {
+        struct node *pnew = (struct node *)malloc(sizeof(struct node ));
+        pnew->next=NULL;
+        scanf("%d",&pnew->data);
+        p->next = pnew;
+        p = pnew;
+    }
+}
+void showlist(struct node *head)
+{
+    struct node *p = head->next;
+    while (p)
+    {
+        printf("%d ",p->data);
+        p = p->next;
+    }
+    printf("\n");
+}
+
+
+struct node *del(struct node *LA)
+{
+    //De-weighting, two loops to operate, de-duplication of disordered linked list
+    struct node *p = LA,*q;
+    while(p->next != NULL)
+    {
+        q = p->next;
+        while (q->next != NULL)
+        {
+            if(p->next->data == q->next->data)
+            {
+                struct node *qt=q->next;
+                q->next = qt->next;
+                free(qt);
+            }
+            else
+            {
+                q= q->next;
+            }
+        }
+        p =p->next;
+    }
+    return LA;
+}
+//1 2 3 6 3
+int main(){
+    int lenA;
+    struct node *LA;
+    //head node
+    LA = (struct node *)malloc(sizeof(struct node ));
+    LA->next=NULL;
+
+    printf("please enter the length of LA: ");
+    scanf("%d",&lenA);
+    creatlist(LA,lenA);
+
+    LA = del(LA);
+    printf("after delete:");
+    showlist(LA);
+
+
+    while(1);
+    return 0;
+}
