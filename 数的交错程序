@@ -1,0 +1,27 @@
+//
+//  main.c
+//  交错程序
+//
+//  Created by 毛遵杰 on 2018/11/15.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+int main(void)
+{
+    int a,i,num;
+    printf("please enter a num");
+    scanf("%d",&num);
+    for (i=1;i<=num;i++)
+    {
+        a=i;
+        if (a%2==1)
+        {
+            printf("+");
+        }
+        else
+            printf("-");
+    
+    }
+    return 0;
+}
