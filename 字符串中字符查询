@@ -1,0 +1,42 @@
+//
+//  main.c
+//  9.16 exercise
+//
+//  Created by 毛遵杰 on 2019/9/16.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+char *find_char(const char * sourse,const char* string)
+{
+    char *sto;
+    sto=(char*)malloc(sizeof(sto));
+    sourse=sto;
+    while(*sourse!=*string&&*sourse!='\0')
+    {
+        sourse++;
+    }
+    if(*sourse==*string)
+        return sourse;
+    else
+        return NULL;
+    
+}
+int main(void)
+{
+    char *p;
+    p=(char *)malloc(sizeof(p));
+    scanf("请输入%c\n",p);
+    printf("用户输入的字符串是%c",*p);
+    char *q;
+    q=(char *)malloc(sizeof(q));
+    scanf("请输入要查询的字符%c\n",q);
+    printf("用户输入的字符是%c",*q);
+   
+    char *result=find_char(p,q);
+    printf("%c",*result);
+    free(p);
+    free(q);
+    return 0;
+}
