@@ -1,0 +1,52 @@
+//
+//  main.c
+//  等腰三角形循环
+//
+//  Created by 毛遵杰 on 2019/1/6.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+int main(void)
+{
+    int n;
+    printf("please enter a number");
+    scanf("%d",&n);
+    
+    for(int i=1;i<=n;i++)
+    {
+        for (int empty=1;empty<=n-i;empty++)
+        {
+            printf(" ");
+        }
+        for ( int word=1;word<=i;word++)
+        {
+            printf("*");
+        }
+        for (int word2=1;word2<=i-1;word2++)
+        {
+            printf("*");
+        }
+        printf("\n");
+    }
+    
+    for (int i=1;i<=n;i++)
+    {
+        for (int empty=1;empty<=i;empty++)
+        {
+            printf(" ");
+        }
+        for(int word=1;word<=n-i;word++)
+        {
+            printf("*");
+        }
+        for (int word2=1;word2<=n-i-1;word2++)
+        {
+            printf("*");
+        }
+        printf("\n");
+    }
+    
+    return 0;
+    
+}
