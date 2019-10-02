@@ -1,0 +1,61 @@
+//
+//  main.c
+//  problem 3.16b code
+//
+//  Created by 毛遵杰 on 2019/9/29.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+
+#include <stdlib.h>
+
+
+
+int main(){
+    int A[100]={0};
+    int i,j,k,N=10,LastPosition;
+    printf(" enter length of array");
+    scanf("%d",&N);
+    printf("enter array");
+   
+    
+    for (i=0;i<N;i++)
+    {
+      
+        scanf("%d",&A[i]);
+    }
+    printf("\n");
+
+    LastPosition=N-1;
+    for (i=0;i<LastPosition;i++)
+    {
+        j=i+1;
+        while (j <= LastPosition)
+        {
+            if (A[i] == A[j])
+            {
+                printf("A[%d]--%d\n",j,A[j]);
+                for (k=j;k<LastPosition;k++)
+                {
+                    A[k]=A[k+1];
+                }
+                LastPosition--;
+        
+            }
+            else
+            {
+                j++;
+            }
+        }
+    }
+
+    printf("\n");
+    N=LastPosition+1;
+    for (i=0;i<N;i++)
+    {
+        printf("%d ",A[i]);
+    }
+    while(1);
+    return 0;
+}
