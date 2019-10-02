@@ -1,0 +1,282 @@
+//
+//  main.c
+//  linked list 1
+//
+//  Created by 毛遵杰 on 2019/5/15.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+#define LEN sizeof(struct student)
+
+struct student
+{
+    int i;
+    char name[20];
+    char tel[15];
+    char addr[50];
+    struct student*next;
+};
+
+void menu()                    //目录格式
+{
+    printf("=================欢迎使用智能通讯录系统======================\n");
+    printf("-------------------1.添加联系人联系信息---------------------\n");
+    printf("-------------------2.删除联系人联系信息---------------------\n");
+    printf("-------------------3.修改联系人联系信息---------------------\n");
+    printf("-------------------4.查找联系人联系信息---------------------\n");
+    printf("-------------------5.展示联系人信息---------------------\n");
+    printf("-------------------6.删除联系人联系信息---------------------\n");
+    printf("-------------------7.感谢你的使用，再见！-----------------------\n");
+    printf("=================欢迎使用智能通讯录系统======================\n");
+}
+
+struct student *creat()                                        //建立链表
+{
+    struct student*p1,*p2,*head;
+    int n = 0;
+    head = NULL;
+    p1=p2=(struct student*)malloc(LEN);
+    printf("输入新成员学号：\n");
+    scanf("%d",&p1->i);
+    printf("输入新成员姓名：\n");
+    scanf("%s",p1->name);
+    printf("输入新成员号码：\n");
+    scanf("%s",p1->tel);
+    printf("输入新成员地址：\n");
+    scanf("%s",p1->addr);
+    printf("添加新成员成功！\n");
+    while(p1->i != 0)
+    {
+        n = n+1;
+        if(n == 1)
+            head = p1;
+        else
+            p2->next = p1;
+        p2 = p1;
+        p1 = (struct student*)malloc(LEN);
+        printf("输入新成员学号：\n");
+        scanf("%d",&p1->i);
+        printf("输入新成员姓名：\n");
+        scanf("%s",p1->name);
+        printf("输入新成员号码：\n");
+        scanf("%s",p1->tel);
+        printf("输入新成员地址：\n");
+        scanf("%s",p1->addr);
+        printf("添加新成员成功！\n");
+    }
+    p2->next = NULL;
+    return head;
+}
+
+struct student *add(struct student *head,int index)                    //增加联系人
+{
+    printf("添加联系人：\n");
+    struct student *p1,*p2,*p3;
+    p3=(struct student*)malloc(LEN);
+    printf("输入新成员学号：\n");
+    scanf("%d",&p3->i);
+    printf("输入新成员姓名：\n");
+    scanf("%s",p3->name);
+    printf("输入新成员号码：\n");
+    scanf("%s",p3->tel);
+    printf("输入新成员地址：\n");
+    scanf("%s",p3->addr);
+    printf("添加新成员成功！\n");
+    p1 = p2 = head;
+    while(p1->next != NULL && p1->i != index)
+    {
+        p2 = p1;
+        p1 = p1->next;
+    }
+    if(p1->i == index)
+    {
+        if(p1 == head)
+        {
+            head = p3;
+            p3->next = p1;
+        }
+        else
+        {
+            p2->next = p3;
+            p3->next = p1;
+        }
+    }
+    else
+    {
+        p1->next = p3;
+        p3->next = NULL;
+    }
+    return head;
+}
+
+struct student *delete(struct student *head,char name[20])                                        //删除联系人
+{
+    struct student *p1,*p2;
+    p1 = head;
+    p2 = p1;
+    while(p1->next !=NULL && strcmp(p1->name,name) != 0)
+    {
+        p2=p1;
+        p1=p1->next;
+    }
+    if(strcmp(p1->name,name) == 0)
+    {
+        if(p1 == head)
+        {
+            head = head->next;
+            printf("删除联系人成功\n");
+        }
+        else
+        {
+            p2->next = p1->next;
+            printf("删除联系人成功\n");
+        }
+    }
+    else
+    {
+        printf("目前通讯录没这个宝宝！\n");
+    }
+    free(p1);
+    return head;
+}
+
+struct student *modify(struct student *head,char name[20])                    //修改联系人
+{
+    struct student *p;
+    p = head;
+    while(p->next != NULL && strcmp(p->name,name)!=0)
+    {
+        p = p->next;
+    }
+    if(strcmp(p->name,name)==0)
+    {
+        printf("输入修改成员学号：\n");
+        scanf("%d",&p->i);
+        printf("输入修改的姓名：\n");
+        scanf("%s",p->name);
+        printf("输入修改的号码：\n");
+        scanf("%s",p->tel);
+        printf("输入修改的地址：\n");
+        scanf("%s",p->addr);
+        printf("修改成功\n");
+    }
+    else
+    {
+        printf("目前通讯录没这个宝宝！\n");
+    }
+    return head;
+}
+
+struct student *find(struct student *head,char name[20])                    //查找联系人
+{
+    struct student *p1;
+    p1 = head;
+    while(p1->next != NULL && strcmp(p1->name,name)!=0)
+    {
+        p1 = p1->next;
+    }
+    if(strcmp(p1->name,name)==0)
+    {
+        printf("序号\t姓名\t号码\t地址\t\n");
+        printf("%d\t",p1->i);
+        printf("%s\t",p1->name);
+        printf("%s\t",p1->tel);
+        printf("%s\t",p1->addr);
+        printf("\n");
+    }
+    else
+        printf("目前通讯录没这个宝宝！\n");
+}
+
+
+void show(struct student *head)                        //打印链表
+{
+    struct student *p;
+    p = head;
+    if(head != NULL)
+    {
+        do
+        {
+            printf("序号\t姓名\t号码\t地址\t\n");
+            printf("%d\t",p->i);
+            printf("%s\t",p->name);
+            printf("%s\t",p->tel);
+            printf("%s\t",p->addr);
+            printf("\n");
+            p = p->next;
+        }while(p != NULL);
+    }
+    else
+        printf("目前通讯录没宝宝！\n");
+}
+
+struct student *clear(struct student *head)
+{
+    head = NULL;
+    return head;
+    
+}
+
+int main()
+{
+    int n = 1;
+    int i;
+    struct student *head;
+    head = creat();
+    char name[20];
+    int index;
+    while(n)
+    {
+        menu();
+        printf("请输入你的骚操作：\n");
+        scanf("%d",&i);
+        switch(i)
+        {
+            case 1:
+            {
+                printf("请输入插到哪个学号前：\n");
+                scanf("%d",&index);
+                head = add(head,index);break;
+            }
+            case 2:
+            {
+                printf("请输入要删除联系人的姓名:\n");
+                scanf("%s",name);
+                head = delete(head,name);break;
+            }
+            case 3:
+            {
+                printf("请输入需要修改的联系人的姓名：\n");
+                scanf("%s",name);
+                modify(head,name);break;
+            }
+            case 4:
+            {
+                printf("请输入查找联系人的姓名：\n");
+                scanf("%s",name);
+                find(head,name);break;
+            }
+            case 5:
+            {
+                show(head);break;
+            }
+            case 6:
+            {
+                head = clear(head);break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+}
+
+
+
+
+
