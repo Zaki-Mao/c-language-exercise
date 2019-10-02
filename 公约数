@@ -1,0 +1,34 @@
+//
+//  main.c
+//  公约数
+//
+//  Created by 毛遵杰 on 2018/11/12.
+//  Copyright © 2018 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+int main(void)
+{
+    int a,b,c,i;
+   
+    printf("please enter two numbers\n");
+    scanf("%d",&a);
+    scanf("%d",&b);
+   
+    if (a<=b)
+        c=a;
+    else
+        c=b;
+    for (i=1;i<=c;i++)
+    {
+        if (a%i==0&&b%i==0)
+        printf("%3d",i);
+    }
+        
+    
+   
+    
+  
+    return 0;
+    
+}
