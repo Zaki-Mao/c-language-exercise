@@ -1,0 +1,498 @@
+/* This code doesn't really do much */
+/* Thus I haven't bothered testing it */
+
+#include "fatal.h"
+
+#define MaxDegree 100
+
+static int
+Max( int A, int B )
+{
+    return A > B ? A : B;
+}
+
+/* START: fig3_18.txt */
+        typedef struct
+        {
+            int CoeffArray[ MaxDegree + 1 ];
+            int HighPower;
+        } *Polynomial;
+/* END */
+
+/* START: fig3_19.txt */
+        void
+        ZeroPolynomial( Polynomial Poly )
+        {
+            int i;
+
+            for( i = 0; i <= MaxDegree; i++ )
+                Poly->CoeffArray[ i ] = 0;
+            Poly->HighPower = 0;
+        }
+/* END */
+
+/* START: fig3_20.txt */
+        
+#if 0
+/* START: fig3_23.txt */
+        typedef struct Node *PtrToNode;
+
+        struct Node
+        {
+            int Coefficient;
+            int Exponent;
+            PtrToNode Next;
+        };
+
+        typedef PtrToNode Polynomial;  /* Nodes sorted by exponent */
+/* END */
+#endif
+
+void
+PrintPoly( const Polynomial Q )
+{
+    int i;
+
+    for( i = Q->HighPower; i > 0; i-- )
+        printf( "%dx^%d + ", Q->CoeffArray[ i ], i );
+    printf( "%d\n", Q->CoeffArray[ 0 ] );
+}
+
+main( )
+{
+    Polynomial P, Q;
+
+    P = malloc( sizeof( *P ) );
+    Q = malloc( sizeof( *Q ) );
+
+    P->HighPower = 1; P->CoeffArray[ 0 ] = 1; P->CoeffArray[ 1 ] = 1;
+    MultPolynomial( P, P, Q );
+    MultPolynomial( Q, Q, P );
+    AddPolynomial( P, P, Q );
+    PrintPoly( Q );
+
+    return 0;
+}
+
+
+
+
+
+
+
+//加法减法链表数组
+#include "stdafx.h"
+#include<stdlib.h>
+#define length sizeof(struct node)
+ 
+typedef struct node
+{
+    float coef;
+    int expn;
+    struct node *next;
+} Test;
+ 
+Test *head, *p, *q, *r,*s;
+ 
+                      
+Test *Create()
+{
+    int List_Size;
+    head = (Test *)malloc(length);
+    p = head;
+    p->next = (Test *)malloc(length);
+    p = p->next;
+    printf("length:");
+    scanf("%d", &List_Size);
+ 
+    if (List_Size>0)
+    {
+        for (int i = 1; i<List_Size; i++)
+        {
+            p->next = (Test *)malloc(length);
+            p = p->next;
+        }
+        p->next = NULL;
+        return head;
+    }
+    else
+    {
+        printf("length must bigger than 0\n");
+    }
+    return head;
+}
+ 
+void InitList(Test *List_Head)//intially
+{
+    if (List_Head->next != NULL)
+    {
+        p = List_Head->next;
+        while (p != NULL)
+        {
+            printf("enter coef,power:");
+            scanf("%f,%d", &p->coef,&p->expn);
+            p = p->next;
+        }
+    }
+    else
+    {
+        printf("error,cannot work\n");
+    }
+}
+ 
+int ListLength(Test *List_Head)
+{
+    int List_Length = 0;
+    if (List_Head->next != NULL)
+    {
+        p = List_Head->next;
+        while (p != NULL)
+        {
+            if (p->coef != 0) {
+                List_Length++;
+            }
+            p = p->next;
+        }
+    }
+    else
+    {
+        printf("empty,0 len");
+    }
+    return List_Length;
+}
+ 
+void ListSort(Test *List_Head)
+{
+    if (List_Head->next != NULL)
+    {
+        q = p = List_Head->next;
+        int temp; float temp1;
+        while (q->next != NULL)
+        {
+            while (p->next != NULL)
+            {
+                p = p->next;
+                if (q->expn > p->expn)
+                {
+                    temp = q->expn;
+                    q->expn = p->expn;
+                    p->expn = temp;
+ 
+                    temp1 = q->coef;
+                    q->coef = p->coef;
+                    p->coef = temp1;
+                }
+            }
+            q = q->next;
+            p = q;
+        }
+    }
+    else
+    {
+        printf("empty");
+    }
+}
+void Display(Test *List_Head)
+{
+    if (List_Head->next != NULL)
+    {
+ 
+        int List_Length;
+        List_Length = ListLength(List_Head);
+ 
+        printf("F=");
+        p = List_Head->next;
+        
+        
+        while (p != NULL)
+        {
+            if (List_Length == 0) {
+                printf("0");
+                break;
+            }
+            if (p->coef == 0) {
+                p = p->next;
+                continue;
+            }
+            if (p->coef<0) {
+                printf("(%2.2fX^%d)", p->coef, p->expn);
+            }
+            else {
+                printf("%2.2fX^%d", p->coef, p->expn);
+            }
+            if (p->next != NULL) {
+                printf("+");
+            }
+            p = p->next;
+        }
+        printf("\n");
+    }
+    else
+    {
+        printf("empty\n");
+    }
+ 
+    printf("\n");
+}
+ 
+Test *mergeList(Test *f1, Test *f2) {
+    p = f1->next; q = f2->next;
+    while (p->next!= NULL) {
+        p = p->next;
+    }
+    p->next = q;
+    head = f1;
+    return head;
+}
+ 
+void addPolyn(Test *f1,Test *f2) {
+    head = f1;p = f1->next; q = f2->next;
+    while (q!=NULL) {
+        p = f1->next;        //每次都将指针指向A的第一项
+        int flag = 0;        //B多项式每后移一项都赋flag为0
+        while (p!=NULL){
+            if (p->expn==q->expn) {
+                flag = 1;        //做为后面是插入还是系数相加的判断条件
+                s = p;        //多项式A里面要是有与当前多项是B中的一个指数相同的话  用s保存下来
+            }
+            p = p->next;
+        }
+        if (flag == 1) {        //如果A中存在与B中当前一项系数相同的项
+            s->coef = s->coef + q->coef;        //将相同系数的项指数相加
+        }
+        else {        //如果不存在
+            r = (Test *)malloc(length);        //将当前项复制到一块新的结构体中
+            r->coef = q->coef;
+            r->expn = q->expn;
+ 
+            r->next = head->next;        //将B当前项插入A中
+            head->next = r;
+        }
+        q = q->next;        //进行B的下一项的判断
+    }
+ 
+    ListSort(f1);//输入随机  有序无序都可以
+}
+ 
+void addPolyn1(Test *f1, Test *f2) {
+    head = mergeList(f1, f2);        //连接链表
+    ListSort(head);        //从小到大排序
+    p = head->next;        //从头结点后的项开始
+    q = p;
+    while (p->next!=NULL) {
+        q = p;        //每一次都是两个挨着的项进行判断
+        if (p->expn==q->next->expn) {        //如果该项和后一项指数值相等
+            p->coef = p->coef + q->next->coef;        //系数相加
+ 
+            r = q->next;        //用一个指针指向后面的一项
+            p->next = r->next;        //跨过后面的一项
+        }
+        else {
+            p = p->next;    //如果该项和后面一项指数不相等  将指针后移一位  继续判断
+        }
+    }
+}
+ 
+void subPolyn(Test *f1,Test *f2) {
+    p = f1->next; q = f2->next;
+    while (q!= NULL) {        //将B中的每一项的系数变为负的
+        q->coef=-q->coef;
+        q = q->next;
+    }
+    addPolyn(f1, f2);        //再进行相加
+}
+ 
+void subPolyn1(Test *f1,Test *f2) {
+    p = f1->next; q = f2->next;
+    while (q != NULL) {        //将B中的每一项的系数变为负的
+        q->coef = -q->coef;
+        q = q->next;
+    }
+ 
+    addPolyn1(f1, f2);
+}
+ 
+int main()
+{
+    Test *List_A, *List_B;
+    List_A = Create();
+    InitList(List_A);
+    Display(List_A);
+    
+    List_B = Create();
+    InitList(List_B);
+    Display(List_B);
+    
+    addPolyn(List_A,List_B);
+    //addPolyn1(List_A, List_B);
+    //subPolyn(List_A, List_B);
+    //subPolyn1(List_A, List_B);
+    Display(List_A);
+}
+//
+//  main.c
+//  linkedpoly
+//
+//  Created by 毛遵杰 on 2019/10/27.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct polynomial{
+    float coef;
+    int expn;
+    struct polynomial *next;
+}polynomial;
+ 
+//m:coef
+void CreatePolyn(polynomial **p, int m){
+    int i, data;
+    int flag;
+    polynomial *cp, *temp;
+    (*p) = (polynomial *)malloc(sizeof(polynomial));
+    (*p)->coef = 0.0;
+    (*p)->expn = -1;
+    (*p)->next = NULL;
+ 
+    for(i=1; i<=m; ++i){
+        cp = *p;
+        flag = 0;
+        temp = (polynomial *)malloc(sizeof(polynomial));
+        printf("请输入第%d项的系数：", i);
+        scanf("%f", &(temp->coef));
+        printf("请输入第%d项的指数：", i);
+        scanf("%d", &(temp->expn));
+ 
+        while(cp->next && temp->expn > cp->next->expn){
+            cp = cp->next;
+        }
+ 
+        if(cp->next && temp->expn == cp->next->expn){
+            continue;
+        }
+ 
+        temp->next = cp->next;
+        cp->next = temp;
+    }
+}
+ 
+
+void PrintPolyn(polynomial *p){
+    polynomial *temp = p->next;
+    while(temp){
+        printf("%.2fx^%d\n", temp->coef, temp->expn);
+        temp = temp->next;
+    }
+}
+ 
+
+   
+ 
+
+void SubtractPolyn(polynomial **pa, polynomial **pb){
+    polynomial *cpa, *cpb, *temp, *ccpa, *p = (*pa);
+    cpa = (*pa)->next;
+    cpb = (*pb)->next;
+ 
+    while(cpa && cpb){
+        //puts("work?");
+        if(cpa->expn < cpb->expn){
+            p->next = cpa;
+            p = cpa;
+            cpa = cpa->next;
+        } else if(cpa->expn > cpb->expn) {
+            p->next = cpb;
+            p = cpb;
+            p->coef *= -1; // 改变系数的符号，将减数多项式的系数变为负的
+            cpb = cpb->next;
+        } else { // cpa->expn == cpb->expn 指数相等
+            if(cpa->coef == cpb->coef){ //如果两项系数相等，删除该节点
+                temp = *pa;
+                while(temp->next != cpa)
+                    temp = temp->next;
+                temp->next = cpa->next;
+                ccpa = cpa;
+                cpa = cpa->next;
+                cpb = cpb->next;
+                free(ccpa);
+            } else {
+                cpa->coef -= cpb->coef;
+                p->next = cpa;
+                p = cpa;
+                cpa = cpa->next;
+                cpb = cpb->next;
+            }
+        }
+    }
+    // 注意：cpa和cpb不是互斥关系，需分开两个if分支，但最多只有一个分支执行，可能同时不执行
+    if(cpa)
+        p->next = cpa;
+ 
+    if(cpb){
+        p->next = cpb;
+        while(cpb){
+            cpb->coef *= -1; // 改变系数的符号，将减数多项式的系数变为负的
+            cpb = cpb->next;
+        }
+    }
+    free(*pb);
+}
+ 
+//将pb中的多项式复制到pa中
+void CopyPolyn(polynomial **pa, polynomial *pb){
+ 
+    CreatePolyn(pa, 0);
+    polynomial *temp, *cpa;
+    cpa = *pa;
+    pb = pb->next; // 移动指针指向第一个节点
+    while(pb){
+        temp = (polynomial *)malloc(sizeof(polynomial));
+        temp->coef = pb->coef;
+        temp->expn = pb->expn;
+        temp->next = NULL;
+ 
+        cpa->next = temp;
+        cpa = temp;
+        pb = pb->next;
+    }
+}
+ 
+//pa为多项式。pb为单项式，与pa中的每一项相乘，结果保存到pa中
+void MultiplyOperate(polynomial *pa, polynomial *pb){
+ 
+    pa = pa->next;
+    while(pa){
+        pa->coef *= pb->coef;
+        pa->expn += pb->expn;
+        pa = pa->next;
+    }
+}
+ 
+// 多项式乘法
+void MultiplyPolyn(polynomial **pa, polynomial **pb){
+    // pa应该在此过程中保持不变，直到得到最后的结果
+    polynomial *cpa, *ccpa, *res;
+    cpa = *pa; //保存着原pa的内容
+ 
+    CreatePolyn(pa, 0); //从新初始化pa为头结点
+    (*pb) = (*pb)->next;
+    while(*pb){
+        CopyPolyn(&ccpa, cpa);
+        MultiplyOperate(ccpa, *pb);
+        AddPolyn(pa, &ccpa);
+        (*pb) = (*pb)->next;
+    }
+}
+ 
+int main(){
+    polynomial *pa, *pb;
+    CreatePolyn(&pa, 2);
+    CreatePolyn(&pb, 2);
+    MultiplyPolyn(&pa, &pb);
+    //SubtractPolyn(&pa, &pb);
+    PrintPolyn(pa);
+    return 0;
+}
+
+
