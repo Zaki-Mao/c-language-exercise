@@ -1,0 +1,30 @@
+//
+//  main.c
+//  recursion ex.1
+//
+//  Created by 毛遵杰 on 2019/11/9.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+
+float fac(int n)
+{
+
+    if(n==1)
+
+        return 1;
+
+else
+
+return 1/fac(n)+1/fac(n-1);
+}
+
+int main(void)
+{
+    int num;
+    scanf("%d\n",&num);
+
+    printf("%.f",fac(num));
+return 0;
+}
