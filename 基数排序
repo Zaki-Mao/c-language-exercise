@@ -1,0 +1,165 @@
+//
+//  Header.h
+//  project 1
+//
+//  Created by 毛遵杰 on 2019/11/10.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+#include <stdbool.h>
+#define Flowover -1
+#define ListEmpty -2
+ 
+struct RadixSort;
+typedef struct RadixSort * List;
+typedef struct RadixSort * Node;
+typedef int Element;
+ 
+struct RadixSort
+{
+    Element elem;
+    Node next;
+};
+int main()
+{
+List CreateList(void);
+bool IsLast(Node N);
+bool IsEmpty(List L);
+List DestroyList(List L);
+void AddNode(List L, Element e);
+void MoveNode(List L1, List L2);/
+void PrintList(List L);
+return 0;
+}
+
+
+#endif
+//
+//  main.c
+//  project 1
+//
+//  Created by 毛遵杰 on 2019/11/10.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+#include <math.h>
+#include "radixsort.h"
+ 
+int main(void)
+{
+    List L[10], sortList;
+    int i, j, num, tempE, firstE, tempSub;
+    sortList = CreateList();
+    for(i = 0; i < 10; i++)
+        L[i] = CreateList();
+    printf("Enter the total number of numbers to sort：");
+    scanf("%d", &num);
+    printf("Enter the number you need to sort one by one：");
+    for(i = 0; i < num; i++){
+        scanf("%d", &tempE);
+        AddNode(sortList, tempE);
+    }
+    
+    for(i = 0; i < 3; i++){
+        while(!IsEmpty(sortList)){
+            firstE = sortList->next->elem;
+            tempSub = (int)(firstE / pow(10, i)) % 10;            MoveNode(L[tempSub], sortList);
+        }
+        
+        for(j = 0; j < 10; j++){
+            while(!IsEmpty(L[j]))
+                MoveNode(sortList, L[j]);
+        }
+        
+        printf("After sorting in the %d round, the data sequence in a single bucket is:", i + 1);
+        PrintList(sortList);
+    }
+    
+    return 0;
+}
+
+//
+//  project1 code implementation file.c
+//  project 1
+//
+//  Created by 毛遵杰 on 2019/11/10.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+
+#include <stdlib.h>
+#include <malloc.h>
+#include <stdio.h>
+#include "radixsort.h"
+ 
+List CreateList(void)
+{
+    List L;
+    L = (List)malloc(sizeof(struct RadixSort));
+    if(L == NULL)
+        exit(Flowover);
+    L->next = NULL;
+}
+ 
+bool IsLast(Node N)
+{
+    return N->next == NULL;
+}
+ 
+bool IsEmpty(List L)
+{
+    return L->next == NULL;
+}
+ 
+List DestroyList(List L)
+{
+    Node temp;
+    while(L != NULL){
+        temp = L->next;
+        free(L);
+        L = temp;
+    }
+    
+    return NULL;
+}
+ 
+void AddNode(List L, Element e)
+{
+    Node N;
+    N = (Node)malloc(sizeof(struct RadixSort));
+    if(N == NULL)
+        exit(Flowover);
+    N->next = NULL;
+    N->elem = e;
+    while(!IsLast(L))
+        L = L->next;
+    L->next = N;
+}
+ 
+ 
+void MoveNode(List L1, List L2)
+{
+    Node temp;
+    while(!IsLast(L1))
+        L1 = L1->next;
+    if(L2->next == NULL)
+        exit(ListEmpty);
+    temp = L2;
+    L2 = L2->next;
+    temp->next = L2->next;
+    L1->next = L2;
+    L2->next = NULL;
+}
+ 
+void PrintList(List L)
+{
+    L = L->next;
+    while(L != NULL){
+        printf("%d ", L->elem);
+        L = L->next;
+    }
+    printf("\n");
+}
+
