@@ -1,0 +1,78 @@
+//
+//  linkedreverse.c
+//  ex.1
+//
+//  Created by 毛遵杰 on 2019/11/7.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include<stdio.h>
+#include<stdlib.h>
+typedef int ElemType;
+typedef struct Node
+{
+    ElemType data;
+    struct Node *next;
+}*List;
+List Create(List first,int n)  //tail insertion create the list
+{
+    int i;
+    List rear,s;
+    first=(List)malloc(sizeof(List)); //head node
+    rear=first;  //tail node
+    for( i=0;i<n;i++)
+    {
+        s=(List)malloc(sizeof(List)); //create new node
+        scanf("%d",&s->data);
+        rear->next=s;
+        rear=rear->next;
+    }
+    rear->next=NULL;
+    return first;
+}
+void Printlist(List L)  //output
+{
+    L=L->next;  //jump across the head node
+    while(L!=NULL)
+    {
+        printf("%d\n",L->data);
+        L=L->next;
+    }
+    return ;
+}
+
+//given function type on the PPT,as follows
+
+List Reverse(List L)  //reverse
+{
+    
+       List p = NULL;
+        List r = L;
+        List Next=NULL;
+        while (r!=NULL)
+        {
+           Next = r->next;
+            r->next = p;
+            p = r;
+            r = Next;
+        }
+    return p;
+}
+
+
+
+int main()
+{
+    List i;
+    int n;
+    printf("please enter");
+    scanf("%d",&n);
+    i=Create(i,n);
+    Printlist(i);
+    Reverse(i);
+    Printlist(i);
+    return 0;
+}
+
+
+
