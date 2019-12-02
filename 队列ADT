@@ -1,0 +1,204 @@
+//
+//  quene.h
+//
+//
+//  Created by 毛遵杰 on 2019/11/10.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdlib.h>
+#include <stdio.h>
+typedef int ElementType;
+
+
+struct QueueRecord;
+typedef struct QueueRecord *Queue;
+typedef struct node
+{
+         ElementType       data;
+         struct node*      next;
+ } QUEUE_NODE;
+struct QueueRecord
+{
+        QUEUE_NODE* front;
+        QUEUE_NODE* rear;
+        int count;
+ };
+
+int IsEmpty( Queue Q );
+Queue CreateQueue(void);
+void DisposeQueue( Queue Q );
+void MakeEmpty( Queue Q );
+void Enqueue( ElementType X, Queue Q );
+ElementType Front( Queue Q );
+void Dequeue( Queue Q );
+ElementType FrontAndDequeue( Queue Q );
+void PrintQueue( Queue Q);
+
+int main()
+
+{
+
+    Queue head;
+    int x=0;
+
+    creatQueue(&head);
+
+    int n;
+    for (int i=0;i<n;i++)
+    {
+        Enquene(&head,n);
+        printfQuene(&head);
+    }
+    
+
+   printQuene(&head);
+    
+    x=Front(&head);
+
+    while (!IsEmpty(&head))
+
+    {
+
+        int tmp;
+
+        if (DeQuene(&head, &tmp))
+
+        {
+
+            printf("out elements：%5d\n", tmp);
+
+        }
+
+    }
+    printf("%5d",Enquene(&head));
+    printf("%5d",Dequene(&head));
+
+    DisposeQuene(&head);
+
+    return 0;
+    }
+//
+//  quene.c
+//  quenelinked
+//
+//  Created by 毛遵杰 on 2019/10/22.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+
+ #include <stdlib.h>
+#include <stdio.h>
+
+ Quene CreateQueue (void)
+ {
+ 
+     Queue queue;
+ 
+ //    Statements
+     queue = (Queue) malloc (sizeof (*queue));
+     if (queue)
+        {
+         queue->front  = NULL;
+         queue->rear   = NULL;
+         queue->count  = 0;
+        }
+     return queue;
+ }    // createQueue
+
+int IsEmpty(Quene Q)
+{
+    
+    return (q->front == NULL);
+
+}
+
+
+void DisposeQueue(Quene Q)
+{
+    while(Q->front)
+        {
+             Q->rear=Q->front->next;
+             free(Q->front);
+             Q->front=Q->rear;
+        }
+       
+}
+
+void MakeEmpty(Quene Q)
+{
+     Queue p,q;
+        Q->rear=Q->front;
+        p=Q->front->next;
+        Q->front->next=NULL;
+        while(p)
+        {
+             q=p;
+             p=p->next;
+             free(q);
+        }
+        return OK;
+}
+
+void Enqueue(ElementType X,Quene Q)
+{
+     QUEUE_NODE * n = (QUEUE_NODE*)malloc(sizeof(QUEUE_NODE));
+        if(n == NULL)
+            return ;
+        n->X = X;
+        n->next = NULL;
+        if(Q->rear == NULL)
+        {
+            Q->front = n;
+            Q->rear = n;
+        }
+        else{
+           Q->rear->next = n;
+            Q->rear= n;
+        }
+    
+   
+}
+ElementType Front(Quene Q)
+{
+    if(!isEmpty(Q))
+        return Q->Front;
+    printf("empty quene");
+    return 0;
+}
+
+Quene Dequene(Quene Q)
+{
+    QUEUE_NODE * n = Q->front;
+        if(Q->front == NULL)
+            return ;
+        if(Q->front == Q->rear)
+        {
+            Q->front = NULL;
+            Q->rear = NULL;
+        }
+        else{
+            Q->front = Q->front->next;
+            free(n);
+        }
+    
+}
+
+void PrintQueue(Quene Q)
+{
+    QUEUE_NODE * n = (QUEUE_NODE*)malloc(sizeof(QUEUE_NODE));
+        n = Q->front;
+        if(n == NULL)
+        {
+            return ;
+        }
+        while(n != NULL)
+        {
+            printf("%c ",n->X);
+            n = n->next;
+        }
+        printf("\n");
+    
+   
+}
+
+
+
