@@ -1,0 +1,77 @@
+//
+//  main.c
+//  quick sort
+//
+//  Created by 毛遵杰 on 2019/12/11.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+void display(int array[], int maxlen)
+{
+    int i;
+ 
+    for(i = 0; i < maxlen; i++)
+    {
+        printf("%-3d", array[i]);
+    }
+    printf("\n");
+ 
+    return ;
+}
+ 
+
+void QuickSort(int *arr, int low, int high)
+{
+    if (low < high)
+    {
+        int i = low;
+        int j = high;
+        int k = arr[low];
+        while (i < j)
+        {
+            while(i < j && arr[j] >= k)
+            {
+                j--;
+            }
+ 
+            if(i < j)
+            {
+                arr[i++] = arr[j];
+            }
+ 
+            while(i < j && arr[i] < k)
+            {
+                i++;
+            }
+ 
+            if(i < j)
+            {
+                arr[j--] = arr[i];
+            }
+        }
+ 
+        arr[i] = k;
+ 
+       
+        QuickSort(arr, low, i - 1);
+        QuickSort(arr, i + 1, high);
+    }
+}
+ 
+
+int main()
+{
+    int array[11] = {3,1,4,1,5,9,2,6,5,3,5};
+    int maxlen = 11;
+    
+    printf("before sorting\n");
+    display(array, maxlen);
+    
+    QuickSort(array, 0, maxlen-1);
+    
+    printf("after sorting\n");
+    display(array, maxlen);
+    
+    return 0;
+
+}
