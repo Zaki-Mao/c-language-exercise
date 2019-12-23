@@ -1,0 +1,50 @@
+//
+//  main.c
+//  shell sort
+//
+//  Created by 毛遵杰 on 2019/12/11.
+//  Copyright © 2019 毛遵杰. All rights reserved.
+//
+
+#include <stdio.h>
+void Print(int a[], int n, int i) {
+    printf("i\n");
+    for (int j = 0; j<8; j++) {
+      printf("a[j]\n");
+    }
+    printf("\n");
+}
+
+void ShellInsertSort(int a[], int n, int dk)
+{
+    for (int i = dk; i<n; ++i) {
+        if (a[i] < a[i - dk]) {
+            int j = i - dk;
+            int x = a[i];
+            a[i] = a[i - dk];
+            while (j >= 0 && x < a[j]) {
+                a[j + dk] = a[j];
+                j -= dk;
+            }
+            a[j + dk] = x;
+        Print(a, n, i);
+    }
+ 
+}
+ void ShellSort(int a[], int n) {
+  
+     int dk = n / 2;
+     while (dk >= 1) {
+         ShellInsertSort(a, n, dk);
+         dk = dk / 2;
+     }
+ }
+    
+    int main(void) {
+    int a[8] = {12,2,16,30,28,10,16,20,6,18};
+   
+    ShellSort(a, 10);
+    Print(a, 10, 10);
+
+    return 0;
+}
